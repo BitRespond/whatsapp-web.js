@@ -17,6 +17,9 @@ declare namespace WAWebJS {
         /** Puppeteer browser running WhatsApp Web */
         pupBrowser?: puppeteer.Browser
 
+        /** Get message by id */
+        getMessageById: (messageId: string) => Promise<Message | null>
+        
         /**Accepts an invitation to join a group */
         acceptInvite(inviteCode: string): Promise<string>
 
@@ -1053,9 +1056,7 @@ declare namespace WAWebJS {
         /** Marks this Chat as unread */
         markUnread: () => Promise<void>
         /** Returns array of all Labels assigned to this Chat */
-        getLabels: () => Promise<Label[]>,
-        /** Get message by id */
-        getMessageById: (messageId: string) => Promise<Message | null>
+        getLabels: () => Promise<Label[]>
     }
 
     export interface MessageSearchOptions {

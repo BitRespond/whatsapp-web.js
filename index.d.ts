@@ -1053,7 +1053,9 @@ declare namespace WAWebJS {
         /** Marks this Chat as unread */
         markUnread: () => Promise<void>
         /** Returns array of all Labels assigned to this Chat */
-        getLabels: () => Promise<Label[]>
+        getLabels: () => Promise<Label[]>,
+        /** Get message by id */
+        getMessageById: (messageId: string) => Promise<Message | null>
     }
 
     export interface MessageSearchOptions {

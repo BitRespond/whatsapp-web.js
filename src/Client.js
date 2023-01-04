@@ -507,6 +507,22 @@ class Client extends EventEmitter {
             }
         });
 
+        await page.exposeFunction('onChatStateChanged', (state) => {
+            /**
+             * Emitted when the chat changes its state
+             * @event Client#contact_change_state
+             * @param {object} state
+             * @param {string} state.type {COMPOSING|RECORDING|AVAILABLE|UNAVAILABLE} Indicates state of chat. 
+             * COMPOSING - contact composing message. 
+             * RECORDING - contact recording audio message.
+             * AVAILABLE - contact stops composing/recording and available
+             * @param {object} state.id containing Contact ID
+             * @param {number} state.t last seen time
+             * @param {number} state.deny unknown
+             */
+            this.emit(Events.CHAT_STATE_CHANGED, state.serialize());
+        });
+
         await page.evaluate(() => {
             window.Store.Msg.on('change', (msg) => { window.onChangeMessageEvent(window.WWebJS.getMessageModel(msg)); });
             window.Store.Msg.on('change:type', (msg) => { window.onChangeMessageTypeEvent(window.WWebJS.getMessageModel(msg)); });
@@ -516,6 +532,7 @@ class Client extends EventEmitter {
             window.Store.AppState.on('change:state', (_AppState, state) => { window.onAppStateChangedEvent(state); });
             window.Store.Conn.on('change:battery', (state) => { window.onBatteryStateChangedEvent(state); });
             window.Store.Call.on('add', (call) => { window.onIncomingCall(call); });
+            window.Store.Presence.on('change:chatstate.type', (state) => { window.onChatStateChanged(state); });
             window.Store.Msg.on('add', (msg) => { 
                 if (msg.isNewMsg) {
                     if(msg.type === 'ciphertext') {

@@ -271,6 +271,9 @@ declare namespace WAWebJS {
 
         /** Emitted when the RemoteAuth session is saved successfully on the external Database */
         on(event: 'remote_session_saved', listener: () => void): this
+
+        /** Emitted when the chat changes its state */
+        on(event: "chat_state_changed", listener: (state: ChatState) => void): this
     }
 
     /** Current connection information */
@@ -510,7 +513,8 @@ declare namespace WAWebJS {
         STATE_CHANGED = 'change_state',
         BATTERY_CHANGED = 'change_battery',
         REMOTE_SESSION_SAVED = 'remote_session_saved',
-        CALL = 'call'
+        INCOMING_CALL = 'call',
+        CHAT_STATE_CHANGED = 'chat_state_changed'
     }
 
     /** Group notification types */
@@ -1102,6 +1106,13 @@ declare namespace WAWebJS {
 
     export interface PrivateChat extends Chat {
 
+    }
+
+    export interface ChatState {
+        id: ChatId,
+        type: "available" | "unavailable" | "composing" | "recording",
+        t: number | undefined,
+        deny: number | undefined,
     }
 
     export type GroupParticipant = {
